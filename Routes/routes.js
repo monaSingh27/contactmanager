@@ -2,8 +2,10 @@
     var app      = express();                               
     var mongoose = require('mongoose');
     var router = express.Router();
+    var jwt    = require('jsonwebtoken');
     var login = require('../models/login');
     var contact = require('../models/usercontact');
+
 
 //register routes
      router.route('/register')
@@ -35,8 +37,39 @@
             		console.log(data);   }
             	}); 
             	
-            res.json("done");
+            res.json("Registration done!!");
    });
+
+
+     router.route('/login')
+     .post(function(req, res) {
+
+       login.findOne({
+         email: req.body.email
+       }, function(err, user) {
+         if (err) throw err;
+         if (!user) {
+           res.json('user not found');
+         } else if (user) {
+           if (user.password != req.body.password) {
+             res.json('Wrong password.');
+           } else {
+               var token = jwt.sign(user,'superSecret', { expiresIn: 60 }); 
+             res.json({
+               success: true,
+               message: 'token!',
+               token: token
+             });
+
+             var decoded = jwt.verify(token, 'superSecret');
+             console.log(decoded)
+           }   
+
+         }
+
+       });
+     });
+
 
 
 
