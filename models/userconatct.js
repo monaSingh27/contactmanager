@@ -2,10 +2,10 @@ var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
 
-var usercontactSchema= new Schema({
+var contact= new Schema({
  	    name    : String,
  	    email    : String,
- 	    mobileno  : Number,
+ 	    mobileno  : Number
  	});
 
-module.exports=mongoose.model('usercontact',usercontactSchema)
+module.exports=mongoose.model('usercontact',contact)
