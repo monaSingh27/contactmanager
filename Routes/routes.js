@@ -1,46 +1,46 @@
-  // set up ========================
-    var express  = require('express');
-    var app      = express();                               // create our app w/ express
+   var express  = require('express');
+    var app      = express();                               
     var mongoose = require('mongoose');
-
-    //var session =require('express-session');
     var router = express.Router();
-   
-    var ulogin = require('../models/login');
-    //var usercontact = require('../models/usercontact');
+    var login = require('../models/login');
+    var contact = require('../models/usercontact');
 
+//register routes
      router.route('/register')
      .post(function(req, res) {
+     	
+            var usercontact = new contact({
+             name:req.body.name,
+              email:req.body.email,
+                mobile:req.body.mobile    });
 
-    	var userlogin = new ulogin();
-    	userlogin.name =req.body.name;
-    	userlogin.email= req.body.email;
-    	userlogin.mobileno =req.body.mobileno;
-    	userlogin.password= req.body.password;
+            usercontact.save(function(err,data){
+                if(err) {
+                    console.log(err);
+                    res.json(err);   }
+                else {
+                console.log(data); }
+            });  
 
-    	// var contactDetails = new usercontact();
-    	// userlogin.name =req.body.name;
-    	// userlogin.email= req.body.email;
-	    // userlogin.mobileno =req.body.mobileno;
-    	
+            	var userlogin = new login({
+                    email:req.body.email,
+                 password:req.body.password
+                });
 
-
-    	userlogin.save(function(err,data){
-
-    		if(err)
-    		{
-    			console.log(err);
-    			res.json(err);
-    		}
-    		else
-    		{
-    		console.log(data);
-    		res.json(data);
-    	     }
-
-
-    	})
-    	
+            	userlogin.save(function(err,data){
+            		if(err) {
+            			console.log(err);
+            			res.json(err);   }
+            		else {
+            		console.log(data);   }
+            	}); 
+            	
+            res.json("done");
    });
+
+
+
+
+
 
      module.exports =router;
