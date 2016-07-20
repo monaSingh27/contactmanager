@@ -59,21 +59,41 @@
                success: true,
                message: 'token!',
                token: token
-             });
+                });
+           login.update( { email: req.body.email },  { $set: { token: token }},function(err,loginuser){
+                 if(err){
+                 	console.log(err);}
+                 else{
+                 	console.log(loginuser)}
 
-             var decoded = jwt.verify(token, 'superSecret');
-             console.log(decoded)
-           }   
-
-         }
-
+           })          
+            }   
+           }
        });
      });
+    
+    router.route('/del/:email').delete(function(req,res) {
+        login.remove({email:req.params.email}, function(err, user) {
+          if (err)
+            res.send(err);
+
+          res.json({ message: 'Successfully deleted' });
+        });
+      });
+
+//       router.route('/logout').post(function(req,res) {
+
+//       login.update( { email:email },  { $unset: { token: token }},function(err,user){
+
+//  if(err) {
+//   console.log(err);  }
+//  else{
+//   console.log(user);
+//   res.json("successfully logout")  }
+// })
+//     });
 
 
-
-
-
-
+              
 
      module.exports =router;
