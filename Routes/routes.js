@@ -71,7 +71,27 @@
            }
        });
      });
-    
+
+                       // session manage using token
+
+
+              router.route('/getdetails').post(function(req,res){
+                login.findOne({token:req.headers['token']},function(err,user){
+                  if(err){
+                    res.json(err);
+                  }
+                  else if(user === null || undefined || ""){
+                    res.json("invalid token")
+                  }
+                  else
+                  {
+                    res.json("authenticate");
+                    console.log("authenticate");
+                  }
+                });
+              });
+                        //
+
     router.route('/del/:email').delete(function(req,res) {
         login.remove({email:req.params.email}, function(err, user) {
           if (err)
